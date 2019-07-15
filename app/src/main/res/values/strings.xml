@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Nasa Images</string>
     <string name="general_error_message">Ooops! Something went wrong</string>
+    <string name="no_title">No title</string>
+    <string name="no_description">No description</string>
+    <string name="search">Search</string>
 </resources>
