@@ -42,7 +42,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="0"
                 android:scaleType="fitCenter"
-                tools:src="@drawable/ic_launcher_background"/>
+                tools:src="@drawable/ic_baseline_search_24px"/>
 
         <Space
                 android:layout_width="match_parent"
