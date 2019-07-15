@@ -2,8 +2,7 @@ package com.fpr0001.nasaimages.di.components
 
 import android.app.Application
 import com.fpr0001.nasaimages.App
-import com.fpr0001.nasaimages.di.modules.ActivitiesBindingModule
-import com.fpr0001.nasaimages.di.modules.UtilsModule
+import com.fpr0001.nasaimages.di.modules.*
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
@@ -14,6 +13,9 @@ import javax.inject.Singleton
 @Component(
     modules = [
         UtilsModule::class,
+        RepositoryModule::class,
+        RetrofitModule::class,
+        ApiModule::class,
         AndroidInjectionModule::class,
         ActivitiesBindingModule::class
     ]
