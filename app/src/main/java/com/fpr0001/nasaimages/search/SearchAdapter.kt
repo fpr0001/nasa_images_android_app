@@ -1,5 +1,6 @@
 package com.fpr0001.nasaimages.search
 
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,20 +8,33 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.DataBindingUtil.bind
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.fpr0001.nasaimages.R
 import com.fpr0001.nasaimages.databinding.ViewHolderImageBinding
 import com.fpr0001.nasaimages.models.LinkResponse
 import com.fpr0001.nasaimages.utils.BaseAdapter
+import kotlinx.android.synthetic.main.view_holder_image.view.*
 
-open class SearchAdapter : BaseAdapter<LinkResponse, ImageViewHolder>() {
+open class SearchAdapter(private val glide: RequestManager) : BaseAdapter<LinkResponse, ImageViewHolder>() {
+
+    private val requestOptions = RequestOptions()
+        .error(R.drawable.image_placeholder)
+        .placeholder(R.drawable.image_placeholder)
+        .centerCrop()
 
     var loadMoreFunc = {}
 
     fun nextPageFetched(newItems: List<LinkResponse>) {
-        list.addAll(newItems)
-        listDisplay = list
-        notifyDataSetChanged()
+        if (newItems.isNotEmpty()) {
+            list.addAll(newItems)
+            listDisplay = list
+            notifyItemRangeInserted(listDisplay.size - newItems.size, newItems.size)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
@@ -32,15 +46,40 @@ open class SearchAdapter : BaseAdapter<LinkResponse, ImageViewHolder>() {
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
         val obj = listDisplay[position]
 
-        Glide.with(holder.itemView.context)
-            .load(obj.href!!)
-            .apply(
-                RequestOptions()
-                    .placeholder(R.drawable.ic_launcher_background)
-                    .centerCrop())
-            .into(holder.binding.root.findViewById(R.id.imageView))
+        holder.binding.imageView.setImageResource(R.drawable.image_placeholder)
 
-        if (position == itemCount - 5) {
+        holder.binding.textViewTitle.text = obj.prompt
+        glide
+            .load(obj.href!!)
+            .apply(requestOptions)
+//            .listener(object: RequestListener<Drawable> {
+//                override fun onLoadFailed(
+//                    e: GlideException?,
+//                    model: Any?,
+//                    target: Target<Drawable>?,
+//                    isFirstResource: Boolean
+//                ): Boolean {
+//                    holder.binding.gradientView.visibility = View.GONE
+//                    holder.binding.textViewTitle.visibility = View.GONE
+//                    return true
+//                }
+//
+//                override fun onResourceReady(
+//                    resource: Drawable?,
+//                    model: Any?,
+//                    target: Target<Drawable>?,
+//                    dataSource: DataSource?,
+//                    isFirstResource: Boolean
+//                ): Boolean {
+//                    holder.binding.gradientView.visibility = View.VISIBLE
+//                    holder.binding.textViewTitle.visibility = View.VISIBLE
+//                    return true
+//                }
+//
+//            })
+            .into(holder.binding.root.imageView)
+
+        if (position == itemCount - 10) {
             loadMoreFunc.invoke()
         }
     }

@@ -1,6 +1,8 @@
 package com.fpr0001.nasaimages.search
 
 import android.app.Application
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.fpr0001.nasaimages.utils.ResponseRepository
 import com.fpr0001.nasaimages.utils.SchedulerProvider
 import dagger.Module
@@ -25,7 +27,12 @@ abstract class SearchModule {
 
         @JvmStatic
         @Provides
-        internal fun providesSearchAdapter() = SearchAdapter()
+        internal fun providesSearchAdapter(glide: RequestManager) = SearchAdapter(glide)
+
+        @JvmStatic
+        @Provides
+        internal fun providesGlide(activity: SearchActivity) = Glide.with(activity)
+
 
     }
 }

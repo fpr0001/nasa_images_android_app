@@ -8,10 +8,11 @@ abstract class BaseAdapter<T, VH : RecyclerView.ViewHolder?> : RecyclerView.Adap
     var listDisplay = listOf<T>()
 
     open fun refreshList(newItems: List<T>) {
+        val listDisplayFormerSize = listDisplay.size
         list.clear()
         list.addAll(newItems)
         listDisplay = list
-        notifyDataSetChanged()
+        notifyItemRangeChanged(0, listDisplayFormerSize)
     }
 
     override fun getItemCount(): Int {
