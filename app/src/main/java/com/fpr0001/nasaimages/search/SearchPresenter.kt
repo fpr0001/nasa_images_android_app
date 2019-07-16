@@ -1,6 +1,7 @@
 package com.fpr0001.nasaimages.search
 
 import android.os.Bundle
+import androidx.appcompat.widget.SearchView
 import com.fpr0001.nasaimages.utils.BasePresenter
 import com.fpr0001.nasaimages.utils.MvpView
 import com.fpr0001.nasaimages.utils.ResponseRepository
@@ -11,13 +12,13 @@ open class SearchPresenter(
     private val repository: ResponseRepository,
     schedulerProvider: SchedulerProvider,
     val adapter: SearchAdapter
-) : BasePresenter<SearchMvpView>(schedulerProvider) {
+) : BasePresenter<SearchMvpView>(schedulerProvider), SearchView.OnQueryTextListener {
 
     init {
         adapter.loadMoreFunc = { fetchMedias(false) }
     }
 
-    protected var page = 1
+    private var page = 1
     private var isLoading = false
     private var hasReachedDataLimit = false
 
@@ -42,7 +43,16 @@ open class SearchPresenter(
 
     }
 
-    fun fetchMedias(fromScratch: Boolean) {
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        fetchMedias(true)
+        return false
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        return false
+    }
+
+    private fun fetchMedias(fromScratch: Boolean) {
 
         if (isLoading) return
         if (!fromScratch && hasReachedDataLimit) return

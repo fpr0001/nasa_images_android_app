@@ -2,8 +2,11 @@ package com.fpr0001.nasaimages.detail
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import com.bumptech.glide.RequestManager
@@ -22,12 +25,17 @@ class DetailActivity : BaseAppCompatActivity() {
 
         private const val EXTRA_MODEL = "ExtraModel"
 
-        fun startActivity(from: AppCompatActivity, view: View, model: ImageData) {
+        fun startActivity(context: Context, model: ImageData) {
+            val intent = Intent(context, DetailActivity::class.java)
+            intent.putExtra(EXTRA_MODEL, model)
+            context.startActivity(intent)
+        }
 
+        fun startActivityWithTransitionAnimation(from: AppCompatActivity, view: View, model: ImageData) {
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                 from,
                 view,
-                "transition"
+                from.getString(R.string.transition_name)
             )
             val intent = Intent(from, DetailActivity::class.java)
             intent.putExtra(EXTRA_MODEL, model)
@@ -38,12 +46,6 @@ class DetailActivity : BaseAppCompatActivity() {
     @Inject
     lateinit var glide: RequestManager
 
-    private val requestOptions = RequestOptions()
-        .error(R.drawable.image_placeholder)
-        .placeholder(R.drawable.image_placeholder)
-        .centerCrop()
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
@@ -53,7 +55,7 @@ class DetailActivity : BaseAppCompatActivity() {
 
         glide
             .load(model.url)
-            .apply(requestOptions)
+            .apply(getRequestOptions())
             .into(imageView)
 
         title = model.title
@@ -62,5 +64,17 @@ class DetailActivity : BaseAppCompatActivity() {
             getString(R.string.created_on),
             SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG).format(model.dateCreated)
         )
+    }
+
+    private fun getRequestOptions(): RequestOptions {
+        return RequestOptions()
+            .error(R.drawable.image_placeholder)
+            .placeholder(R.drawable.image_placeholder)
+            .apply {
+                when (resources.configuration.orientation) {
+                    Configuration.ORIENTATION_LANDSCAPE -> this.fitCenter()
+                    else -> this.centerCrop()
+                }
+            }
     }
 }

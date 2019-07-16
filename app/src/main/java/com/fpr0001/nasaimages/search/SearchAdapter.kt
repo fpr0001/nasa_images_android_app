@@ -51,14 +51,8 @@ open class SearchAdapter(private val glide: RequestManager) : BaseAdapter<ImageD
 
         holder.binding.textViewTitle.text = imageData.title ?: holder.binding.root.context.getString(R.string.no_title)
         holder.setTextVisible(false)
-        holder.itemView.setOnClickListener {
+        holder.itemView.setOnClickListener { DetailActivity.startActivity(holder.itemView.context, imageData) }
 
-            DetailActivity.startActivity(
-                holder.itemView.context as AppCompatActivity,
-                holder.binding.imageView,
-                imageData
-            )
-        }
         glide
             .load(imageData.url)
             .transition(transitionFade)

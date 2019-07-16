@@ -20,11 +20,14 @@ class SearchActivity : BaseAppCompatActivity(), SearchMvpView {
     @Inject
     lateinit var presenter: SearchPresenter
     private var searchView: SearchView? = null
+    private var query: CharSequence? = null
 
     companion object {
 
         private const val KEY_LIST_STATE = "keyListState"
         private const val KEY_QUERY = "keyQuery"
+        private const val KEY_LABEL_VISIBILITY = "keyLabelVisibility"
+        private const val KEY_LABEL_TEXT = "keyLabelText"
 
         fun startActivity(context: Context) {
             val intent = Intent(context, SearchActivity::class.java)
@@ -47,17 +50,14 @@ class SearchActivity : BaseAppCompatActivity(), SearchMvpView {
         menuInflater.inflate(R.menu.menu_search, menu)
         val menuItem = menu?.findItem(R.id.action_search)
         searchView = menuItem?.actionView as SearchView
-        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                presenter.fetchMedias(true)
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return false
-            }
-        })
+        searchView?.maxWidth = Integer.MAX_VALUE
+        searchView?.setOnQueryTextListener(presenter)
         searchView?.setIconifiedByDefault(true)
+        if (query != null) {
+            menuItem.expandActionView()
+            searchView?.setQuery(query, false)
+            query = null
+        }
         return true
     }
 
@@ -65,6 +65,8 @@ class SearchActivity : BaseAppCompatActivity(), SearchMvpView {
         super.onSaveInstanceState(state)
         state.putParcelable(KEY_LIST_STATE, recyclerView.layoutManager?.onSaveInstanceState())
         state.putCharSequence(KEY_QUERY, searchView?.query)
+        state.putCharSequence(KEY_LABEL_TEXT, textViewError.text)
+        state.putInt(KEY_LABEL_VISIBILITY, textViewError.visibility)
         presenter.onSaveInstanceState(state)
     }
 
@@ -72,10 +74,12 @@ class SearchActivity : BaseAppCompatActivity(), SearchMvpView {
         super.onRestoreInstanceState(state)
         if (state != null) {
             presenter.onRestoreInstanceState(state)
+            textViewError.text = state.getCharSequence(KEY_LABEL_TEXT)
+            textViewError.visibility = state.getInt(KEY_LABEL_VISIBILITY)
             state.getParcelable<Parcelable>(KEY_LIST_STATE)?.let {
                 recyclerView.layoutManager?.onRestoreInstanceState(it)
             }
-            searchView?.setQuery(state.getCharSequence(KEY_QUERY), false)
+            query = state.getCharSequence(KEY_QUERY)
         }
     }
 
