@@ -24,13 +24,11 @@ open class SearchPresenter(
 
     companion object {
         private const val KEY_PAGE = "keyPage"
-        private const val KEY_IS_LOADING = "keyIsLoading"
         private const val KEY_DATA_LIMIT = "keyDataLimit"
     }
 
     override fun onSaveInstanceState(state: Bundle) {
         state.putInt(KEY_PAGE, page)
-        state.putBoolean(KEY_IS_LOADING, isLoading)
         state.putBoolean(KEY_DATA_LIMIT, hasReachedDataLimit)
         repository.cachedImageDataList = adapter.list
     }
@@ -39,8 +37,6 @@ open class SearchPresenter(
         page = state.getInt(KEY_PAGE)
         hasReachedDataLimit = state.getBoolean(KEY_DATA_LIMIT)
         adapter.list = repository.cachedImageDataList
-        isLoading = state.getBoolean(KEY_IS_LOADING)
-
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
@@ -52,7 +48,7 @@ open class SearchPresenter(
         return false
     }
 
-    private fun fetchMedias(fromScratch: Boolean) {
+    fun fetchMedias(fromScratch: Boolean) {
 
         if (isLoading) return
         if (!fromScratch && hasReachedDataLimit) return
@@ -63,7 +59,7 @@ open class SearchPresenter(
         }
         view?.showLoader()
         view?.hideErrorViews()
-        schedulerProvider.async(repository.fetchImages(page, view?.getSearchQuery() ?: ""))
+        schedulerProvider.async(repository.fetchImages(page, view?.getSearchQuery()?.toString() ?: ""))
             .subscribe { responseList, exception ->
                 view?.hideLoader()
                 if (exception != null) {
@@ -93,5 +89,5 @@ interface SearchMvpView : MvpView {
     fun onMediasRetrieved()
     fun showRandomErrorView()
     fun hideErrorViews()
-    fun getSearchQuery(): String
+    fun getSearchQuery(): CharSequence?
 }

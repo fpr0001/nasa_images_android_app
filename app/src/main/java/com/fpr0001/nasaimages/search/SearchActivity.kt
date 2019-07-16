@@ -7,6 +7,7 @@ import android.os.Parcelable
 import android.view.Menu
 import android.view.View
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import com.fpr0001.nasaimages.R
 import com.fpr0001.nasaimages.utils.BaseAppCompatActivity
@@ -26,7 +27,8 @@ class SearchActivity : BaseAppCompatActivity(), SearchMvpView {
 
         private const val KEY_LIST_STATE = "keyListState"
         private const val KEY_QUERY = "keyQuery"
-        private const val KEY_LABEL_VISIBILITY = "keyLabelVisibility"
+        private const val KEY_IS_LOADING = "keyIsLoading"
+        private const val KEY_EMPTY_LIST_VISIBILITY = "keyEmptyListVisibility"
         private const val KEY_LABEL_TEXT = "keyLabelText"
 
         fun startActivity(context: Context) {
@@ -39,10 +41,8 @@ class SearchActivity : BaseAppCompatActivity(), SearchMvpView {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-
         recyclerView.layoutManager = GridLayoutManager(this, 2)
         recyclerView.adapter = presenter.adapter
-
         presenter.attachView(this)
     }
 
@@ -56,6 +56,7 @@ class SearchActivity : BaseAppCompatActivity(), SearchMvpView {
         if (query != null) {
             menuItem.expandActionView()
             searchView?.setQuery(query, false)
+            presenter.fetchMedias(false)
             query = null
         }
         return true
@@ -66,7 +67,8 @@ class SearchActivity : BaseAppCompatActivity(), SearchMvpView {
         state.putParcelable(KEY_LIST_STATE, recyclerView.layoutManager?.onSaveInstanceState())
         state.putCharSequence(KEY_QUERY, searchView?.query)
         state.putCharSequence(KEY_LABEL_TEXT, textViewError.text)
-        state.putInt(KEY_LABEL_VISIBILITY, textViewError.visibility)
+        state.putInt(KEY_EMPTY_LIST_VISIBILITY, emptyListLayout.visibility)
+        state.putBoolean(KEY_IS_LOADING, progressBar?.isVisible ?: false)
         presenter.onSaveInstanceState(state)
     }
 
@@ -75,7 +77,7 @@ class SearchActivity : BaseAppCompatActivity(), SearchMvpView {
         if (state != null) {
             presenter.onRestoreInstanceState(state)
             textViewError.text = state.getCharSequence(KEY_LABEL_TEXT)
-            textViewError.visibility = state.getInt(KEY_LABEL_VISIBILITY)
+            emptyListLayout.visibility = state.getInt(KEY_EMPTY_LIST_VISIBILITY)
             state.getParcelable<Parcelable>(KEY_LIST_STATE)?.let {
                 recyclerView.layoutManager?.onRestoreInstanceState(it)
             }
@@ -90,7 +92,7 @@ class SearchActivity : BaseAppCompatActivity(), SearchMvpView {
     }
 
     override fun hideErrorViews() {
-        textViewError.visibility = View.GONE
+        emptyListLayout.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
     }
 
@@ -98,18 +100,18 @@ class SearchActivity : BaseAppCompatActivity(), SearchMvpView {
     }
 
     override fun showRandomErrorView() {
-        textViewError.visibility = View.VISIBLE
+        emptyListLayout.visibility = View.VISIBLE
         recyclerView.visibility = View.GONE
         textViewError.setText(R.string.general_error_message)
     }
 
     override fun showEmptyListView() {
-        textViewError.visibility = View.VISIBLE
+        emptyListLayout.visibility = View.VISIBLE
         recyclerView.visibility = View.GONE
         textViewError.setText(R.string.no_results_found)
     }
 
-    override fun getSearchQuery(): String {
-        return searchView?.query?.toString() ?: ""
+    override fun getSearchQuery(): CharSequence? {
+        return searchView?.query
     }
 }

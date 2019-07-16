@@ -5,7 +5,10 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
+        android:background="@android:color/black"
+        android:focusableInTouchMode="true"
         android:animateLayoutChanges="true"
+        android:id="@+id/root"
         android:layout_height="match_parent">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -33,9 +36,19 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
-                                                           android:animateLayoutChanges="true"
+                                                           android:id="@+id/emptyListLayout"
+                                                           android:background="@color/colorPrimaryDark"
                                                            android:layout_height="match_parent">
 
+
+            <androidx.appcompat.widget.AppCompatImageView android:layout_width="wrap_content"
+                                                          android:id="@+id/imageLogo"
+                                                          app:layout_constraintStart_toStartOf="parent"
+                                                          app:layout_constraintEnd_toEndOf="parent"
+                                                          android:src="@mipmap/ic_launcher_foreground"
+                                                          android:layout_height="wrap_content"
+                                                          android:layout_marginBottom="8dp"
+                                                          app:layout_constraintBottom_toTopOf="@+id/textViewError"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textViewError"
@@ -43,9 +56,10 @@
                     android:layout_height="wrap_content"
                     android:text="@string/type_to_search"
                     android:textAlignment="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@android:color/white"
                     android:textSize="20sp"
-                    android:layout_margin="20dp"
+                    android:padding="20dp"
+                    android:gravity="center"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -55,8 +69,10 @@
 
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
+                android:background="@android:color/black"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
                 android:layout_width="match_parent"
+                android:visibility="invisible"
                 android:layout_height="match_parent"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
