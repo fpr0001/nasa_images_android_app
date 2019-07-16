@@ -1,6 +1,9 @@
 package com.fpr0001.nasaimages.search
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.Menu
 import android.view.View
 import androidx.appcompat.widget.SearchView
@@ -11,12 +14,23 @@ import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_search.*
 import javax.inject.Inject
 
+
 class SearchActivity : BaseAppCompatActivity(), SearchMvpView {
 
     @Inject
     lateinit var presenter: SearchPresenter
-
     private var searchView: SearchView? = null
+
+    companion object {
+
+        private const val KEY_LIST_STATE = "keyListState"
+        private const val KEY_QUERY = "keyQuery"
+
+        fun startActivity(context: Context) {
+            val intent = Intent(context, SearchActivity::class.java)
+            context.startActivity(intent)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -26,10 +40,7 @@ class SearchActivity : BaseAppCompatActivity(), SearchMvpView {
         recyclerView.layoutManager = GridLayoutManager(this, 2)
         recyclerView.adapter = presenter.adapter
 
-        swipeToRefresh.setOnRefreshListener { presenter.fetchMedias(true) }
-
         presenter.attachView(this)
-        presenter.fetchMedias(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -50,24 +61,32 @@ class SearchActivity : BaseAppCompatActivity(), SearchMvpView {
         return true
     }
 
+    override fun onSaveInstanceState(state: Bundle) {
+        super.onSaveInstanceState(state)
+        state.putParcelable(KEY_LIST_STATE, recyclerView.layoutManager?.onSaveInstanceState())
+        state.putCharSequence(KEY_QUERY, searchView?.query)
+        presenter.onSaveInstanceState(state)
+    }
+
+    override fun onRestoreInstanceState(state: Bundle?) {
+        super.onRestoreInstanceState(state)
+        if (state != null) {
+            presenter.onRestoreInstanceState(state)
+            state.getParcelable<Parcelable>(KEY_LIST_STATE)?.let {
+                recyclerView.layoutManager?.onRestoreInstanceState(it)
+            }
+            searchView?.setQuery(state.getCharSequence(KEY_QUERY), false)
+        }
+    }
+
     override fun setupActionBar() {
         super.setupActionBar()
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
         supportActionBar?.title = getString(R.string.app_name)
     }
 
-    override fun showLoader() {
-        if (!swipeToRefresh.isRefreshing) {
-            swipeToRefresh.isRefreshing = true
-        }
-    }
-
-    override fun hideLoader() {
-        swipeToRefresh.isRefreshing = false
-    }
-
     override fun hideErrorViews() {
-        llError.visibility = View.GONE
+        textViewError.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
     }
 
@@ -75,19 +94,15 @@ class SearchActivity : BaseAppCompatActivity(), SearchMvpView {
     }
 
     override fun showRandomErrorView() {
-        llError.visibility = View.VISIBLE
+        textViewError.visibility = View.VISIBLE
         recyclerView.visibility = View.GONE
-//        binding.textViewErrorTitle.setText(R.string.random_error_title)
-//        binding.textViewErrorSubtitle.setText(R.string.random_error_message)
-//        binding.imageViewError.setImageResource(R.mipmap.stop_friend)
+        textViewError.setText(R.string.general_error_message)
     }
 
     override fun showEmptyListView() {
-        llError.visibility = View.VISIBLE
+        textViewError.visibility = View.VISIBLE
         recyclerView.visibility = View.GONE
-//        binding.textViewErrorTitle.setText(R.string.empty_list_error_title)
-//        binding.textViewErrorSubtitle.setText(R.string.empty_list_error_message)
-//        binding.imageViewError.setImageResource(R.mipmap.loupe_friend)
+        textViewError.setText(R.string.no_results_found)
     }
 
     override fun getSearchQuery(): String {

@@ -1,5 +1,6 @@
 package com.fpr0001.nasaimages.utils
 
+import android.os.Bundle
 import io.reactivex.disposables.CompositeDisposable
 
 abstract class BasePresenter<T : MvpView>(protected val schedulerProvider: SchedulerProvider) {
@@ -14,6 +15,12 @@ abstract class BasePresenter<T : MvpView>(protected val schedulerProvider: Sched
     fun onDetach() {
         view = null
         compositeDisposable.clear()
+    }
+
+    open fun onSaveInstanceState(state: Bundle) {
+    }
+
+    open fun onRestoreInstanceState(state: Bundle) {
     }
 
 }

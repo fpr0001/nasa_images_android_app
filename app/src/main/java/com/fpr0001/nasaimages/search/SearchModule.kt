@@ -33,6 +33,5 @@ abstract class SearchModule {
         @Provides
         internal fun providesGlide(activity: SearchActivity) = Glide.with(activity)
 
-
     }
 }

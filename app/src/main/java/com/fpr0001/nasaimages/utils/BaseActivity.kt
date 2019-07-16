@@ -15,19 +15,19 @@ abstract class BaseAppCompatActivity : AppCompatActivity(), MvpView {
     override fun setContentView(layoutResID: Int) {
         super.setContentView(layoutResID)
         setupActionBar()
-        progressBar = findViewById(R.id.progress_bar)
+        progressBar = findViewById(R.id.progressBar)
     }
 
     override fun setContentView(view: View?) {
         super.setContentView(view)
         setupActionBar()
-        progressBar = findViewById(R.id.progress_bar)
+        progressBar = findViewById(R.id.progressBar)
     }
 
     override fun setContentView(view: View?, params: ViewGroup.LayoutParams?) {
         super.setContentView(view, params)
         setupActionBar()
-        progressBar = findViewById(R.id.progress_bar)
+        progressBar = findViewById(R.id.progressBar)
     }
 
     open fun setupActionBar() {

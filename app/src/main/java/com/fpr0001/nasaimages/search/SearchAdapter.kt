@@ -15,6 +15,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.fpr0001.nasaimages.R
 import com.fpr0001.nasaimages.databinding.ViewHolderImageBinding
+import com.fpr0001.nasaimages.detail.DetailActivity
 import com.fpr0001.nasaimages.models.ImageData
 import com.fpr0001.nasaimages.utils.BaseAdapter
 import kotlinx.android.synthetic.main.view_holder_image.view.*
@@ -33,8 +34,7 @@ open class SearchAdapter(private val glide: RequestManager) : BaseAdapter<ImageD
     fun nextPageFetched(newItems: List<ImageData>) {
         if (newItems.isNotEmpty()) {
             list.addAll(newItems)
-            listDisplay = list
-            notifyItemRangeInserted(listDisplay.size - newItems.size, newItems.size)
+            notifyItemRangeInserted(list.size - newItems.size, newItems.size)
         }
     }
 
@@ -45,10 +45,11 @@ open class SearchAdapter(private val glide: RequestManager) : BaseAdapter<ImageD
     }
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
-        val imageData = listDisplay[position]
+        val imageData = list[position]
 
         holder.binding.textViewTitle.text = imageData.title ?: holder.binding.root.context.getString(R.string.no_title)
         holder.setTextVisible(false)
+        holder.itemView.setOnClickListener { DetailActivity.startActivity(holder.itemView.context, imageData) }
 
         glide
             .load(imageData.url)

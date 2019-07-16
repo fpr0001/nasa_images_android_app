@@ -1,92 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+
+<androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/main_content"
         android:layout_width="match_parent"
+        android:animateLayoutChanges="true"
         android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appbar"
-            tools:background="@android:color/black"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/main_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/progressBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="0dp">
 
-        <include
-                android:id="@+id/toolbar"
-                layout="@layout/toolbar"
-                tools:background="@android:color/black"
+        <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_scrollFlags="scroll|enterAlways"/>
+                android:layout_height="wrap_content">
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <include
+                    android:id="@+id/toolbar"
+                    layout="@layout/toolbar"
+                    tools:background="@android:color/black"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:layout_scrollFlags="scroll|enterAlways"/>
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/llError"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="20dp"
-            android:orientation="vertical">
+        </com.google.android.material.appbar.AppBarLayout>
 
-        <Space
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"/>
+        <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
+                                                           android:animateLayoutChanges="true"
+                                                           android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/image_view_error"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="0"
-                android:scaleType="fitCenter"
-                tools:src="@drawable/ic_baseline_search_24px"/>
 
-        <Space
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight=".7"/>
-
-        <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/text_view_error_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:text="@string/general_error_message"
-                android:textAlignment="center"
-                android:textSize="20sp"
-                android:textStyle="bold"/>
-
-        <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/text_view_error_subtitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_weight="0"
-                android:text="@string/general_error_message"
-                android:textAlignment="center"
-                android:textSize="16sp"/>
-
-        <Space
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"/>
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
-
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipeToRefresh"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+            <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textViewError"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/type_to_search"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
+                    android:layout_margin="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.55"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <include layout="@layout/progress_bar"
+             android:id="@+id/progressBar"
+             android:layout_width="match_parent"
+             android:visibility="gone"
+             tools:visibility="visible"
+             android:layout_height="wrap_content"
+             app:layout_constraintBottom_toBottomOf="parent"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintStart_toStartOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

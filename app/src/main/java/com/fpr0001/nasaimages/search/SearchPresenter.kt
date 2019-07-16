@@ -1,5 +1,6 @@
 package com.fpr0001.nasaimages.search
 
+import android.os.Bundle
 import com.fpr0001.nasaimages.utils.BasePresenter
 import com.fpr0001.nasaimages.utils.MvpView
 import com.fpr0001.nasaimages.utils.ResponseRepository
@@ -20,6 +21,27 @@ open class SearchPresenter(
     private var isLoading = false
     private var hasReachedDataLimit = false
 
+    companion object {
+        private const val KEY_PAGE = "keyPage"
+        private const val KEY_IS_LOADING = "keyIsLoading"
+        private const val KEY_DATA_LIMIT = "keyDataLimit"
+    }
+
+    override fun onSaveInstanceState(state: Bundle) {
+        state.putInt(KEY_PAGE, page)
+        state.putBoolean(KEY_IS_LOADING, isLoading)
+        state.putBoolean(KEY_DATA_LIMIT, hasReachedDataLimit)
+        repository.cachedImageDataList = adapter.list
+    }
+
+    override fun onRestoreInstanceState(state: Bundle) {
+        page = state.getInt(KEY_PAGE)
+        hasReachedDataLimit = state.getBoolean(KEY_DATA_LIMIT)
+        adapter.list = repository.cachedImageDataList
+        isLoading = state.getBoolean(KEY_IS_LOADING)
+
+    }
+
     fun fetchMedias(fromScratch: Boolean) {
 
         if (isLoading) return
@@ -31,7 +53,7 @@ open class SearchPresenter(
         }
         view?.showLoader()
         view?.hideErrorViews()
-        schedulerProvider.async(repository.fetchImages(page, view?.getSearchQuery()?:""))
+        schedulerProvider.async(repository.fetchImages(page, view?.getSearchQuery() ?: ""))
             .subscribe { responseList, exception ->
                 view?.hideLoader()
                 if (exception != null) {
@@ -44,7 +66,7 @@ open class SearchPresenter(
                     } else {
                         adapter.nextPageFetched(responseList)
                     }
-                    if (adapter.listDisplay.isEmpty()) {
+                    if (adapter.list.isEmpty()) {
                         view?.showEmptyListView()
                     } else {
                         view?.onMediasRetrieved()

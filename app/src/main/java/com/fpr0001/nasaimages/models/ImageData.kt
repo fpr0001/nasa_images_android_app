@@ -1,20 +1,13 @@
 package com.fpr0001.nasaimages.models
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import java.util.*
+import kotlinx.android.parcel.Parcelize
+import java.util.Date
 
-class ImageData {
-
-    @SerializedName("title")
-    var title: String? = null
-
-    @SerializedName("description")
-    var description: String? = null
-
-    @SerializedName("date_created")
-    var dateCreated: Date? = null
-
-    @SerializedName("href")
-    lateinit var url: String
-
-}
+@Parcelize
+class ImageData(var title:String? = null,
+                var description: String? = null,
+                var dateCreated: Date? = null,
+                var url: String
+                ) : Parcelable
