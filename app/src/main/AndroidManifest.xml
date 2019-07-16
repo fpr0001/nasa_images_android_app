@@ -10,7 +10,11 @@
                  android:supportsRtl="true"
                  android:theme="@style/AppTheme">
 
-        <activity android:name=".splash.SplashActivity">
+        <activity android:name=".splash.SplashActivity"
+                  android:theme="@style/SplashTheme"
+                  android:noHistory="true"
+                  android:screenOrientation="portrait"
+        >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <action android:name="android.intent.action.VIEW"/>
