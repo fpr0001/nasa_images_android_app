@@ -11,6 +11,7 @@
                                                       tools:src="@drawable/image_placeholder"
                                                       android:layout_width="match_parent"
                                                       android:layout_height="236dp"
+                                                      android:background="?selectableItemBackground"
                                                       tools:layout_width="match_parent"
                                                       app:layout_constraintTop_toTopOf="parent"
                                                       app:layout_constraintEnd_toEndOf="parent"

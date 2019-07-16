@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">Nasa Images</string>
     <string name="general_error_message">Ooops! Something went wrong</string>
+    <string name="no_results_found">No results found</string>
     <string name="no_title">No title</string>
     <string name="no_description">No description</string>
     <string name="search">Search</string>
+    <string name="type_to_search">Use the Search Bar to look for Nasa images</string>
+    <string name="created_on">Created on %s</string>
 </resources>

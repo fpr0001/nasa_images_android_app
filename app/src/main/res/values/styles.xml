@@ -8,4 +8,15 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="TextAppearance.Design.CollapsingToolbar.Expanded.Nasa">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ThemeOverlay.AppCompat.Dark.ActionBar.Collapsing">
+        <item name="android:textColorPrimary">@android:color/white</item>
+    </style>
+
 </resources>

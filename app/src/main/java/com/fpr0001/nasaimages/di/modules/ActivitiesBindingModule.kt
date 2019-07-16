@@ -1,5 +1,7 @@
 package com.fpr0001.nasaimages.di.modules
 
+import com.fpr0001.nasaimages.detail.DetailActivity
+import com.fpr0001.nasaimages.detail.DetailModule
 import com.fpr0001.nasaimages.search.SearchActivity
 import com.fpr0001.nasaimages.search.SearchModule
 import com.fpr0001.nasaimages.splash.SplashActivity
@@ -11,6 +13,9 @@ abstract class ActivitiesBindingModule {
 
     @ContributesAndroidInjector(modules = [SearchModule::class])
     abstract fun bindSearch(): SearchActivity
+
+    @ContributesAndroidInjector(modules = [DetailModule::class])
+    abstract fun bindDetail(): DetailActivity
 
 //    @ContributesAndroidInjector(modules = [SplashModule::class])
 //    abstract fun bindSplash(): SplashActivity
