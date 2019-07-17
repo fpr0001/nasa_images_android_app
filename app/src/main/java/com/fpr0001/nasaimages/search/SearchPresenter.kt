@@ -45,7 +45,7 @@ open class SearchPresenterImpl(
         }
     }
 
-    private fun fetchMedias(fromScratch: Boolean) {
+    fun fetchMedias(fromScratch: Boolean) {
 
         if (isLoading) return
         if (!fromScratch && hasReachedDataLimit) return

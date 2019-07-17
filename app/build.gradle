@@ -41,8 +41,14 @@ dependencies {
 
     //test
     testImplementation 'junit:junit:4.12'
+    testImplementation "org.mockito:mockito-core:2.27.0"
+
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    //dagger for tests
+    kaptTest "com.google.dagger:dagger-android-processor:$dagger_version"
+    kaptTest "com.google.dagger:dagger-compiler:$dagger_version"
 
     //androidx
     implementation 'androidx.appcompat:appcompat:1.0.2'

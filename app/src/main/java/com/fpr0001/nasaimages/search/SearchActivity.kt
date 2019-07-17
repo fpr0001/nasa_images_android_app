@@ -120,6 +120,11 @@ class SearchActivity : BaseAppCompatActivity(), SearchMvpView {
         super.hideKeyboard()
         root.requestFocus()
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.destroy()
+    }
 }
 
 interface SearchMvpView : MvpView {

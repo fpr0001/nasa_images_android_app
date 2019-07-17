@@ -6,7 +6,7 @@ import kotlinx.android.parcel.Parcelize
 import java.util.Date
 
 @Parcelize
-class ImageData(
+open class ImageData(
     var title: String? = null,
     var description: String? = null,
     var dateCreated: Date? = null,
