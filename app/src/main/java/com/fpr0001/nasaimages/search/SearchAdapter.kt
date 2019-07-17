@@ -4,9 +4,6 @@ import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.LinearInterpolator
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityOptionsCompat
 import androidx.databinding.DataBindingUtil.bind
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
@@ -15,13 +12,14 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
 import com.fpr0001.nasaimages.R
 import com.fpr0001.nasaimages.databinding.ViewHolderImageBinding
 import com.fpr0001.nasaimages.detail.DetailActivity
 import com.fpr0001.nasaimages.models.ImageData
 import com.fpr0001.nasaimages.utils.BaseAdapter
 import com.fpr0001.nasaimages.utils.BaseAdapterImpl
-import kotlinx.android.synthetic.main.view_holder_image.view.*
+
 
 open class SearchAdapterImpl(private val glide: RequestManager) : BaseAdapterImpl<ImageData, ImageViewHolder>(),
     SearchAdapter {
@@ -31,7 +29,8 @@ open class SearchAdapterImpl(private val glide: RequestManager) : BaseAdapterImp
         .placeholder(R.drawable.image_placeholder)
         .centerCrop()
 
-    private val transitionFade = DrawableTransitionOptions.withCrossFade(200)
+    private val transitionFade =
+        DrawableTransitionOptions.withCrossFade(DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build())
 
     override var loadMoreFunc: (() -> Unit)? = null
 
@@ -60,7 +59,7 @@ open class SearchAdapterImpl(private val glide: RequestManager) : BaseAdapterImp
             .transition(transitionFade)
             .apply(requestOptions)
             .listener(holder)
-            .into(holder.binding.root.imageView)
+            .into(holder.binding.imageView)
 
         if (position == itemCount - 20) {
             loadMoreFunc?.invoke()
@@ -82,8 +81,8 @@ class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), Reque
             binding.gradientView.animate().apply { alpha(1.0f) }.start()
             binding.textViewTitle.animate().apply { alpha(1.0f) }.start()
         } else {
-            binding.gradientView.animate().apply { alpha(0.0f) }.start()
-            binding.textViewTitle.animate().apply { alpha(0.0f) }.start()
+            binding.gradientView.alpha = 0.0f
+            binding.textViewTitle.alpha = 0.0f
         }
     }
 

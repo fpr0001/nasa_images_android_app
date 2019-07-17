@@ -10,6 +10,7 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import com.bumptech.glide.RequestManager
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.fpr0001.nasaimages.R
 import com.fpr0001.nasaimages.models.ImageData
@@ -55,6 +56,7 @@ class DetailActivity : BaseAppCompatActivity() {
 
         glide
             .load(model.url)
+            .transition(DrawableTransitionOptions.withCrossFade())
             .apply(getRequestOptions())
             .into(imageView)
 
@@ -68,8 +70,6 @@ class DetailActivity : BaseAppCompatActivity() {
 
     private fun getRequestOptions(): RequestOptions {
         return RequestOptions()
-            .error(R.drawable.image_placeholder)
-            .placeholder(R.drawable.image_placeholder)
             .apply {
                 when (resources.configuration.orientation) {
                     Configuration.ORIENTATION_LANDSCAPE -> this.fitCenter()
