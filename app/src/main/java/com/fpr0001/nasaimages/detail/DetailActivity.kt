@@ -2,9 +2,10 @@ package com.fpr0001.nasaimages.detail
 
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ActivityInfo
 import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
+import android.text.Html
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
@@ -58,10 +59,15 @@ class DetailActivity : BaseAppCompatActivity() {
             .load(model.url)
             .transition(DrawableTransitionOptions.withCrossFade())
             .apply(getRequestOptions())
-            .into(imageView)
+            .into(imageView as ImageView)
 
         title = model.title
-        textViewDescription?.text = model.description
+        textViewDescription?.text = try {
+            Html.fromHtml(model.description, Html.FROM_HTML_MODE_COMPACT)
+        } catch (e: Throwable) {
+            model.description
+        }
+
         textViewDate?.text = String.format(
             getString(R.string.created_on),
             SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG).format(model.dateCreated)

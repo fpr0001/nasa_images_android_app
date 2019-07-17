@@ -28,7 +28,7 @@
                                                                     app:expandedTitleMarginEnd="12dp"
         >
 
-            <com.github.chrisbanes.photoview.PhotoView
+            <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/imageView"
                     android:layout_width="match_parent"
                     android:layout_height="260dp"
@@ -92,6 +92,7 @@
                     android:id="@+id/textViewDescription"
                     android:layout_width="match_parent"
                     android:layout_marginStart="16dp"
+                    android:autoLink="all"
                     android:layout_marginEnd="16dp"
                     android:layout_marginTop="8dp"
                     android:lineSpacingMultiplier="1.05"
