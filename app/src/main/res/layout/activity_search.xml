@@ -7,6 +7,7 @@
         android:layout_width="match_parent"
         android:background="@android:color/black"
         android:focusableInTouchMode="true"
+        android:focusable="true"
         android:animateLayoutChanges="true"
         android:id="@+id/root"
         android:layout_height="match_parent">

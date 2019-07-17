@@ -9,6 +9,9 @@ import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.fpr0001.nasaimages.R
+import android.app.Activity
+import android.view.inputmethod.InputMethodManager
+
 
 abstract class BaseAppCompatActivity : AppCompatActivity(), MvpView {
 
@@ -57,8 +60,10 @@ abstract class BaseAppCompatActivity : AppCompatActivity(), MvpView {
         if (throwable == null) {
             showToast()
         } else {
-            showToast(throwable.message
-                ?: getString(R.string.general_error_message))
+            showToast(
+                throwable.message
+                    ?: getString(R.string.general_error_message)
+            )
         }
     }
 
@@ -69,4 +74,17 @@ abstract class BaseAppCompatActivity : AppCompatActivity(), MvpView {
     override fun hideLoader() {
         progressBar?.visibility = View.GONE
     }
+
+    override fun hideKeyboard() {
+        val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        currentFocus?.let { imm.hideSoftInputFromWindow(it.windowToken, 0) }
+    }
+}
+
+
+interface MvpView {
+    fun showLoader()
+    fun hideLoader()
+    fun hideKeyboard()
+    fun displayError(throwable: Throwable? = null)
 }

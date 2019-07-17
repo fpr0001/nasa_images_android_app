@@ -3,34 +3,31 @@ package com.fpr0001.nasaimages.utils
 import android.os.Bundle
 import io.reactivex.disposables.CompositeDisposable
 
-abstract class BasePresenter<T : MvpView>(protected val schedulerProvider: SchedulerProvider) {
+abstract class BasePresenterImpl<T : MvpView>(protected val schedulerProvider: SchedulerProvider) : BasePresenter<T> {
 
-    open var view: T? = null
+    protected var view: T? = null
     protected val compositeDisposable = CompositeDisposable()
 
-    fun attachView(mvpView: T) {
+    override fun attachView(mvpView: T) {
         view = mvpView
     }
 
-    fun onDetach() {
+    override fun destroy() {
         view = null
         compositeDisposable.clear()
     }
 
-    open fun onSaveInstanceState(state: Bundle) {
+    override fun onSaveInstanceState(state: Bundle) {
     }
 
-    open fun onRestoreInstanceState(state: Bundle) {
+    override fun onRestoreInstanceState(state: Bundle) {
     }
 
 }
 
-interface MvpView {
-
-    fun showLoader()
-
-    fun hideLoader()
-
-    fun displayError(throwable: Throwable? = null)
-
+interface BasePresenter<T : MvpView> {
+    fun destroy()
+    fun attachView(mvpView: T)
+    fun onSaveInstanceState(state: Bundle)
+    fun onRestoreInstanceState(state: Bundle)
 }

@@ -2,17 +2,14 @@ package com.fpr0001.nasaimages.search
 
 import android.os.Bundle
 import androidx.appcompat.widget.SearchView
-import com.fpr0001.nasaimages.utils.BasePresenter
-import com.fpr0001.nasaimages.utils.MvpView
-import com.fpr0001.nasaimages.utils.ResponseRepository
-import com.fpr0001.nasaimages.utils.SchedulerProvider
+import com.fpr0001.nasaimages.utils.*
 import io.reactivex.rxkotlin.addTo
 
-open class SearchPresenter(
+open class SearchPresenterImpl(
     private val repository: ResponseRepository,
     schedulerProvider: SchedulerProvider,
-    val adapter: SearchAdapter
-) : BasePresenter<SearchMvpView>(schedulerProvider), SearchView.OnQueryTextListener {
+    final override val adapter: SearchAdapter
+) : BasePresenterImpl<SearchMvpView>(schedulerProvider), SearchPresenter {
 
     init {
         adapter.loadMoreFunc = { fetchMedias(false) }
@@ -21,34 +18,34 @@ open class SearchPresenter(
     private var page = 1
     private var isLoading = false
     private var hasReachedDataLimit = false
+    override var query: CharSequence? = null
 
     companion object {
         private const val KEY_PAGE = "keyPage"
+        private const val KEY_QUERY = "keyQuery"
         private const val KEY_DATA_LIMIT = "keyDataLimit"
+        private const val KEY_IS_LOADING = "keyIsLoading"
     }
 
     override fun onSaveInstanceState(state: Bundle) {
         state.putInt(KEY_PAGE, page)
         state.putBoolean(KEY_DATA_LIMIT, hasReachedDataLimit)
+        state.putCharSequence(KEY_QUERY, query)
+        state.putBoolean(KEY_IS_LOADING, isLoading)
         repository.cachedImageDataList = adapter.list
     }
 
     override fun onRestoreInstanceState(state: Bundle) {
         page = state.getInt(KEY_PAGE)
         hasReachedDataLimit = state.getBoolean(KEY_DATA_LIMIT)
+        query = state.getCharSequence(KEY_QUERY)
         adapter.list = repository.cachedImageDataList
+        if (state.getBoolean(KEY_IS_LOADING)) {
+            fetchMedias(false)
+        }
     }
 
-    override fun onQueryTextSubmit(query: String?): Boolean {
-        fetchMedias(true)
-        return false
-    }
-
-    override fun onQueryTextChange(newText: String?): Boolean {
-        return false
-    }
-
-    fun fetchMedias(fromScratch: Boolean) {
+    private fun fetchMedias(fromScratch: Boolean) {
 
         if (isLoading) return
         if (!fromScratch && hasReachedDataLimit) return
@@ -58,8 +55,8 @@ open class SearchPresenter(
             page = 1
         }
         view?.showLoader()
-        view?.hideErrorViews()
-        schedulerProvider.async(repository.fetchImages(page, view?.getSearchQuery()?.toString() ?: ""))
+        view?.hideEmptyListViewMessage()
+        schedulerProvider.async(repository.fetchImages(page, query?.toString() ?: ""))
             .subscribe { responseList, exception ->
                 view?.hideLoader()
                 if (exception != null) {
@@ -74,20 +71,25 @@ open class SearchPresenter(
                     }
                     if (adapter.list.isEmpty()) {
                         view?.showEmptyListView()
-                    } else {
-                        view?.onMediasRetrieved()
                     }
                 }
                 isLoading = false
             }.addTo(compositeDisposable)
     }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        this.query = query
+        fetchMedias(true)
+        view?.hideKeyboard()
+        return true
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        return false
+    }
 }
 
-
-interface SearchMvpView : MvpView {
-    fun showEmptyListView()
-    fun onMediasRetrieved()
-    fun showRandomErrorView()
-    fun hideErrorViews()
-    fun getSearchQuery(): CharSequence?
+interface SearchPresenter : BasePresenter<SearchMvpView>, SearchView.OnQueryTextListener {
+    val query: CharSequence?
+    val adapter: SearchAdapter
 }

@@ -20,9 +20,11 @@ import com.fpr0001.nasaimages.databinding.ViewHolderImageBinding
 import com.fpr0001.nasaimages.detail.DetailActivity
 import com.fpr0001.nasaimages.models.ImageData
 import com.fpr0001.nasaimages.utils.BaseAdapter
+import com.fpr0001.nasaimages.utils.BaseAdapterImpl
 import kotlinx.android.synthetic.main.view_holder_image.view.*
 
-open class SearchAdapter(private val glide: RequestManager) : BaseAdapter<ImageData, ImageViewHolder>() {
+open class SearchAdapterImpl(private val glide: RequestManager) : BaseAdapterImpl<ImageData, ImageViewHolder>(),
+    SearchAdapter {
 
     private val requestOptions = RequestOptions()
         .error(R.drawable.image_placeholder)
@@ -31,9 +33,9 @@ open class SearchAdapter(private val glide: RequestManager) : BaseAdapter<ImageD
 
     private val transitionFade = DrawableTransitionOptions.withCrossFade(200)
 
-    var loadMoreFunc = {}
+    override var loadMoreFunc: (() -> Unit)? = null
 
-    fun nextPageFetched(newItems: List<ImageData>) {
+    override fun nextPageFetched(newItems: List<ImageData>) {
         if (newItems.isNotEmpty()) {
             list.addAll(newItems)
             notifyItemRangeInserted(list.size - newItems.size, newItems.size)
@@ -61,9 +63,14 @@ open class SearchAdapter(private val glide: RequestManager) : BaseAdapter<ImageD
             .into(holder.binding.root.imageView)
 
         if (position == itemCount - 20) {
-            loadMoreFunc.invoke()
+            loadMoreFunc?.invoke()
         }
     }
+}
+
+interface SearchAdapter : BaseAdapter<ImageData> {
+    fun nextPageFetched(newItems: List<ImageData>)
+    var loadMoreFunc: (() -> Unit)?
 }
 
 class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), RequestListener<Drawable> {

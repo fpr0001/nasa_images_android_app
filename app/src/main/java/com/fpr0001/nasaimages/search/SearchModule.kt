@@ -22,12 +22,12 @@ abstract class SearchModule {
             adapter: SearchAdapter,
             schedulerProvider: SchedulerProvider
         ): SearchPresenter {
-            return SearchPresenter(repository, schedulerProvider, adapter)
+            return SearchPresenterImpl(repository, schedulerProvider, adapter)
         }
 
         @JvmStatic
         @Provides
-        internal fun providesSearchAdapter(glide: RequestManager) = SearchAdapter(glide)
+        internal fun providesSearchAdapter(glide: RequestManager): SearchAdapter = SearchAdapterImpl(glide)
 
         @JvmStatic
         @Provides

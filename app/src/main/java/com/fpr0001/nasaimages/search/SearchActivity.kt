@@ -7,10 +7,10 @@ import android.os.Parcelable
 import android.view.Menu
 import android.view.View
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import com.fpr0001.nasaimages.R
 import com.fpr0001.nasaimages.utils.BaseAppCompatActivity
+import com.fpr0001.nasaimages.utils.MvpView
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_search.*
 import javax.inject.Inject
@@ -21,14 +21,13 @@ class SearchActivity : BaseAppCompatActivity(), SearchMvpView {
     @Inject
     lateinit var presenter: SearchPresenter
     private var searchView: SearchView? = null
-    private var query: CharSequence? = null
+    private var searchHasFocus: Boolean? = null
 
     companion object {
 
         private const val KEY_LIST_STATE = "keyListState"
-        private const val KEY_QUERY = "keyQuery"
-        private const val KEY_IS_LOADING = "keyIsLoading"
         private const val KEY_EMPTY_LIST_VISIBILITY = "keyEmptyListVisibility"
+        private const val KEY_SEARCH_HAS_FOCUS = "keySearchHasFocus"
         private const val KEY_LABEL_TEXT = "keyLabelText"
 
         fun startActivity(context: Context) {
@@ -42,7 +41,7 @@ class SearchActivity : BaseAppCompatActivity(), SearchMvpView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         recyclerView.layoutManager = GridLayoutManager(this, 2)
-        recyclerView.adapter = presenter.adapter
+        recyclerView.adapter = presenter.adapter.asRecyclerAdapter()
         presenter.attachView(this)
     }
 
@@ -53,11 +52,15 @@ class SearchActivity : BaseAppCompatActivity(), SearchMvpView {
         searchView?.maxWidth = Integer.MAX_VALUE
         searchView?.setOnQueryTextListener(presenter)
         searchView?.setIconifiedByDefault(true)
-        if (query != null) {
+        if (presenter.query != null) {
             menuItem.expandActionView()
-            searchView?.setQuery(query, false)
-            presenter.fetchMedias(false)
-            query = null
+            searchView?.setQuery(presenter.query, false)
+        }
+        searchHasFocus?.let { hasFocus ->
+            if (!hasFocus) {
+                searchHasFocus = null
+                root.requestFocus()
+            }
         }
         return true
     }
@@ -65,23 +68,25 @@ class SearchActivity : BaseAppCompatActivity(), SearchMvpView {
     override fun onSaveInstanceState(state: Bundle) {
         super.onSaveInstanceState(state)
         state.putParcelable(KEY_LIST_STATE, recyclerView.layoutManager?.onSaveInstanceState())
-        state.putCharSequence(KEY_QUERY, searchView?.query)
         state.putCharSequence(KEY_LABEL_TEXT, textViewError.text)
         state.putInt(KEY_EMPTY_LIST_VISIBILITY, emptyListLayout.visibility)
-        state.putBoolean(KEY_IS_LOADING, progressBar?.isVisible ?: false)
+        state.putBoolean(KEY_SEARCH_HAS_FOCUS, searchView?.hasFocus() ?: false)
         presenter.onSaveInstanceState(state)
     }
 
     override fun onRestoreInstanceState(state: Bundle?) {
         super.onRestoreInstanceState(state)
         if (state != null) {
-            presenter.onRestoreInstanceState(state)
-            textViewError.text = state.getCharSequence(KEY_LABEL_TEXT)
-            emptyListLayout.visibility = state.getInt(KEY_EMPTY_LIST_VISIBILITY)
             state.getParcelable<Parcelable>(KEY_LIST_STATE)?.let {
                 recyclerView.layoutManager?.onRestoreInstanceState(it)
             }
-            query = state.getCharSequence(KEY_QUERY)
+            when (state.getInt(KEY_EMPTY_LIST_VISIBILITY)) {
+                View.VISIBLE -> showEmptyListViewMessage()
+                else -> hideEmptyListViewMessage()
+            }
+            searchHasFocus = state.getBoolean(KEY_SEARCH_HAS_FOCUS)
+            presenter.onRestoreInstanceState(state)
+            textViewError.text = state.getCharSequence(KEY_LABEL_TEXT)
         }
     }
 
@@ -91,27 +96,34 @@ class SearchActivity : BaseAppCompatActivity(), SearchMvpView {
         supportActionBar?.title = getString(R.string.app_name)
     }
 
-    override fun hideErrorViews() {
+    override fun hideEmptyListViewMessage() {
         emptyListLayout.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
     }
 
-    override fun onMediasRetrieved() {
-    }
-
     override fun showRandomErrorView() {
-        emptyListLayout.visibility = View.VISIBLE
-        recyclerView.visibility = View.GONE
+        showEmptyListViewMessage()
         textViewError.setText(R.string.general_error_message)
     }
 
     override fun showEmptyListView() {
-        emptyListLayout.visibility = View.VISIBLE
-        recyclerView.visibility = View.GONE
+        showEmptyListViewMessage()
         textViewError.setText(R.string.no_results_found)
     }
 
-    override fun getSearchQuery(): CharSequence? {
-        return searchView?.query
+    private fun showEmptyListViewMessage() {
+        emptyListLayout.visibility = View.VISIBLE
+        recyclerView.visibility = View.GONE
     }
+
+    override fun hideKeyboard() {
+        super.hideKeyboard()
+        root.requestFocus()
+    }
+}
+
+interface SearchMvpView : MvpView {
+    fun showEmptyListView()
+    fun showRandomErrorView()
+    fun hideEmptyListViewMessage()
 }
