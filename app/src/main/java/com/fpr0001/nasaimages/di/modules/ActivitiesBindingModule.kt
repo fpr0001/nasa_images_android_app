@@ -17,6 +17,4 @@ abstract class ActivitiesBindingModule {
     @ContributesAndroidInjector(modules = [DetailModule::class])
     abstract fun bindDetail(): DetailActivity
 
-//    @ContributesAndroidInjector(modules = [SplashModule::class])
-//    abstract fun bindSplash(): SplashActivity
 }

@@ -13,6 +13,4 @@ abstract class UtilsModule {
     @Binds
     abstract fun bindsSchedulerProvider(schedulerProviderImpl: SchedulerProviderImpl): SchedulerProvider
 
-
-
 }
