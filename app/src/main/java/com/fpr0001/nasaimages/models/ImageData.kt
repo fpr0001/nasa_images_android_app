@@ -6,8 +6,11 @@ import kotlinx.android.parcel.Parcelize
 import java.util.Date
 
 @Parcelize
-class ImageData(var title:String? = null,
-                var description: String? = null,
-                var dateCreated: Date? = null,
-                var url: String
-                ) : Parcelable
+class ImageData(
+    var title: String? = null,
+    var description: String? = null,
+    var dateCreated: Date? = null,
+    var url: String
+) : BaseModel(url.hashCode().toLong()), Parcelable
+
+abstract class BaseModel(var id: Long)

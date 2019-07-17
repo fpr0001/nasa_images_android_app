@@ -1,15 +1,25 @@
 package com.fpr0001.nasaimages.utils
 
 import androidx.recyclerview.widget.RecyclerView
+import com.fpr0001.nasaimages.models.BaseModel
 
-abstract class BaseAdapterImpl<T, VH : RecyclerView.ViewHolder?> : RecyclerView.Adapter<VH>(), BaseAdapter<T> {
+abstract class BaseAdapterImpl<T : BaseModel, VH : RecyclerView.ViewHolder?> : RecyclerView.Adapter<VH>(),
+    BaseAdapter<T> {
+
+    init {
+        this.setHasStableIds(true)
+    }
 
     override var list: MutableList<T> = mutableListOf()
 
     override fun refreshList(newItems: List<T>) {
         list.clear()
         list.addAll(newItems)
-        notifyItemRangeChanged(0, newItems.size)
+        notifyDataSetChanged()
+    }
+
+    override fun getItemId(position: Int): Long {
+        return list[position].id
     }
 
     override fun getItemCount(): Int {
