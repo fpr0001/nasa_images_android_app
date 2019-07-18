@@ -1,6 +1,8 @@
 package com.fpr0001.nasaimages.search
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.appcompat.widget.SearchView
 import com.fpr0001.nasaimages.utils.*
 import io.reactivex.rxkotlin.addTo
@@ -25,6 +27,7 @@ open class SearchPresenterImpl(
         private const val KEY_QUERY = "keyQuery"
         private const val KEY_DATA_LIMIT = "keyDataLimit"
         private const val KEY_IS_LOADING = "keyIsLoading"
+        const val MAX_COUNT_PER_PAGE = 100
     }
 
     override fun onSaveInstanceState(state: Bundle) {
@@ -63,11 +66,11 @@ open class SearchPresenterImpl(
                     view?.showRandomErrorView()
                 } else {
                     page++
-                    hasReachedDataLimit = responseList.size != 100
+                    hasReachedDataLimit = responseList.size != MAX_COUNT_PER_PAGE
                     if (fromScratch) {
                         adapter.refreshList(responseList)
                     } else {
-                        adapter.nextPageFetched(responseList)
+                        Handler(Looper.getMainLooper()).post {adapter.nextPageFetched(responseList)}
                     }
                     if (adapter.list.isEmpty()) {
                         view?.showEmptyListView()

@@ -9,6 +9,7 @@ import com.fpr0001.nasaimages.utils.*
 import dagger.Module
 import dagger.Provides
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.spy
 import javax.inject.Singleton
 
 
@@ -50,6 +51,6 @@ open class AppModuleForTest {
 
     @Provides
     @Singleton
-    internal fun providesSearchAdapter(impl: SearchAdapterImpl): SearchAdapter = impl
+    internal fun providesSearchAdapter(impl: SearchAdapterImpl): SearchAdapter = spy(impl)
 
 }

@@ -26,7 +26,7 @@ interface ResponseRepository {
 
 open class ResponseMapper {
 
-    fun fromItemResponse(obj: ItemResponse): ImageData? {
+    open fun fromItemResponse(obj: ItemResponse): ImageData? {
 
         val url = obj.links?.firstOrNull()?.href ?: return null
         val auxObjData = obj.data?.firstOrNull() ?: return null

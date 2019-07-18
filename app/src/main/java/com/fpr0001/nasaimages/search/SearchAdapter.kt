@@ -24,6 +24,10 @@ import com.fpr0001.nasaimages.utils.BaseAdapterImpl
 open class SearchAdapterImpl(private val glide: RequestManager) : BaseAdapterImpl<ImageData, ImageViewHolder>(),
     SearchAdapter {
 
+    companion object {
+        private const val DELTA_TO_REQUEST_NEXT_PAGE = 20
+    }
+
     private val requestOptions = RequestOptions()
         .error(R.drawable.image_placeholder)
         .placeholder(R.drawable.image_placeholder)
@@ -61,7 +65,7 @@ open class SearchAdapterImpl(private val glide: RequestManager) : BaseAdapterImp
             .listener(holder)
             .into(holder.binding.imageView)
 
-        if (position == itemCount - 20) {
+        if (position == itemCount - DELTA_TO_REQUEST_NEXT_PAGE) {
             loadMoreFunc?.invoke()
         }
     }
