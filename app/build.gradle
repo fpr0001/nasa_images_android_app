@@ -14,7 +14,7 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.fpr0001.nasaimages.TestApplicationRunner"
     }
     buildTypes {
         release {
@@ -33,6 +33,9 @@ androidExtensions {
 
 ext {
     dagger_version = '2.22.1'
+    mockito_version = '2.27.0'
+    espresso_version = '3.2.0-beta01'
+    dagger_mock_version = '0.8.5'
 }
 
 dependencies {
@@ -41,15 +44,22 @@ dependencies {
 
     //test
     testImplementation 'junit:junit:4.12'
-    testImplementation "org.mockito:mockito-core:2.27.0"
+    testImplementation "org.mockito:mockito-core:$mockito_version"
     testImplementation 'com.google.code.gson:gson:2.8.5'
 
+    androidTestImplementation "org.mockito:mockito-android:$mockito_version"
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
+    androidTestImplementation "androidx.test.espresso:espresso-intents:$espresso_version"
 
     //dagger for tests
-    kaptTest "com.google.dagger:dagger-android-processor:$dagger_version"
-    kaptTest "com.google.dagger:dagger-compiler:$dagger_version"
+    kaptAndroidTest "com.google.dagger:dagger-android-processor:$dagger_version"
+    kaptAndroidTest "com.google.dagger:dagger-compiler:$dagger_version"
+    androidTestImplementation "com.github.fabioCollini.daggermock:daggermock:$dagger_mock_version"
+    androidTestImplementation "com.github.fabioCollini.daggermock:daggermock-kotlin:$dagger_mock_version"
 
     //androidx
     implementation 'androidx.appcompat:appcompat:1.0.2'

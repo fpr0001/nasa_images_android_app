@@ -9,7 +9,7 @@ import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-open class RepositoryModule {
+open class RepositoryModuleForTests {
 
     @Provides
     @Singleton
@@ -22,5 +22,6 @@ open class RepositoryModule {
         ResponseRepositoryImpl(nasaApi, mapper)
 
     @Provides
+    @Singleton
     open fun providesResponseMapper() = ResponseMapper()
 }
