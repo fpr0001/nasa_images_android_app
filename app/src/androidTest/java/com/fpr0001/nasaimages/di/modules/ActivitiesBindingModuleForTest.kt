@@ -8,9 +8,7 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class ActivitiesBindingModuleForTest {
 
-    @ContributesAndroidInjector(modules = [SearchModuleForTests::class])
+    @ContributesAndroidInjector
     abstract fun bindSearch(): SearchActivity
-//
-//    @ContributesAndroidInjector(modules = [SearchModuleForTests::class])
-//    abstract fun bindSearchTest(): SearchModuleForTests
+
 }

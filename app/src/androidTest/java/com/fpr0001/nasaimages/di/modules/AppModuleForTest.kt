@@ -3,6 +3,7 @@ package com.fpr0001.nasaimages.di.modules
 import android.app.Application
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
+import com.fpr0001.nasaimages.AppForTests
 import com.fpr0001.nasaimages.search.*
 import com.fpr0001.nasaimages.utils.*
 import dagger.Module
@@ -16,16 +17,17 @@ import javax.inject.Singleton
  * ALL DEPENDENCIES MUST BE DECLARED HERE, BECAUSE DAGGERMOCK ONLY
  * REPLACES INSTANCES FROM APPLICATION COMPONENT
  */
-@Module
+@Module(
+    includes = [ApiModuleForTests::class,
+        RepositoryModuleForTests::class,
+        UtilsModuleForTests::class
+    ]
+)
 open class AppModuleForTest {
 
     @Provides
     @Singleton
-    open fun providesSchedulerProviderImpl(): SchedulerProviderTestImpl = SchedulerProviderTestImpl()
-
-    @Provides
-    @Singleton
-    open fun providesSchedulerProvider(impl: SchedulerProviderTestImpl): SchedulerProvider = impl
+    internal fun providesGlide(app: AppForTests) = Glide.with(app)
 
     @Provides
     @Singleton
@@ -49,22 +51,5 @@ open class AppModuleForTest {
     @Provides
     @Singleton
     internal fun providesSearchAdapter(impl: SearchAdapterImpl): SearchAdapter = impl
-
-    @Provides
-    @Singleton
-    internal fun providesGlide(app: Application) = Glide.with(app)
-
-
-    @Provides
-    @Singleton
-    open fun providesRepository(impl: ResponseRepositoryImpl): ResponseRepository =
-        impl
-
-    @Provides
-    @Singleton
-    open fun providesRepositoryImpl(): ResponseRepositoryImpl = mock(ResponseRepositoryImpl::class.java)
-
-    @Provides
-    open fun providesResponseMapper() = ResponseMapper()
 
 }

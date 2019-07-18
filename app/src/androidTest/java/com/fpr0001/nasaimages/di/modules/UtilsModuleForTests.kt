@@ -1,5 +1,7 @@
 package com.fpr0001.nasaimages.di.modules
 
+import com.bumptech.glide.Glide
+import com.fpr0001.nasaimages.AppForTests
 import com.fpr0001.nasaimages.utils.SchedulerProvider
 import com.fpr0001.nasaimages.utils.SchedulerProviderTestImpl
 import dagger.Binds
@@ -8,11 +10,10 @@ import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-open class UtilsModuleForTests {
+abstract class UtilsModuleForTests {
 
     @Singleton
-    @Provides
-    open fun providesSchedulerProvider(schedulerProviderImpl: SchedulerProviderTestImpl): SchedulerProvider =
-        schedulerProviderImpl
+    @Binds
+    abstract fun bindsSchedulerProvider(impl: SchedulerProviderTestImpl): SchedulerProvider
 
 }
