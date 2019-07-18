@@ -1,5 +1,6 @@
 package com.fpr0001.nasaimages.apis
 
+import androidx.annotation.VisibleForTesting
 import com.fpr0001.nasaimages.models.NasaResponse
 import io.reactivex.Single
 import retrofit2.http.GET
@@ -13,4 +14,7 @@ interface NasaApi {
         @Query("page") page: Int = 1
     )
             : Single<NasaResponse>
+
+    @VisibleForTesting
+    val title: String
 }

@@ -1,14 +1,12 @@
 package com.fpr0001.nasaimages.search
 
 import androidx.test.espresso.Espresso
+import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.filters.MediumTest
 import androidx.test.rule.ActivityTestRule
-import com.fpr0001.nasaimages.R
-import com.fpr0001.nasaimages.appForTests
-import com.fpr0001.nasaimages.di.AppComponentForTest
-import com.fpr0001.nasaimages.utils.ResponseRepository
-import it.cosenonjaviste.daggermock.DaggerMock
+import com.fpr0001.nasaimages.*
+import com.fpr0001.nasaimages.apis.NasaApi
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -18,7 +16,7 @@ import javax.inject.Inject
 class SearchActivityTest {
 
     @Inject
-    lateinit var repository: ResponseRepository
+    lateinit var nasaApi: NasaApi
 
     @get:Rule
     val activityRule = ActivityTestRule(SearchActivity::class.java, false, false)
@@ -29,13 +27,24 @@ class SearchActivityTest {
     }
 
     @Test
-    fun test_VisibilityOfViews_When_InitialState() {
-
-//        Mockito.`when`(repository.fetchImages().fetchAndStoreEntities(any())).thenReturn(Completable.error(RuntimeException()))
-//        Mockito.doNothing().`when`(splashRouter).goToLogin(any())
+    fun shouldHaveCorrectVisibilityInInitialState() {
         activityRule.launchActivity(null)
-//        Espresso.onView(ViewMatchers.withId(R.id.button)).isGone()
-        Espresso.onView(ViewMatchers.withId(R.id.progressBar))
-//        Espresso.onView(ViewMatchers.withId(R.id.imageView)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        Espresso.onView(ViewMatchers.withId(R.id.recyclerView)).isInvisible()
+        Espresso.onView(ViewMatchers.withId(R.id.emptyListLayout)).isVisible()
+        Espresso.onView(ViewMatchers.withText(R.string.type_to_search)).isVisible()
+        Espresso.onView(ViewMatchers.withId(R.id.progressBar)).isGone()
+    }
+
+    @Test
+    fun shouldShowImagesWhenQuerySubmitted() {
+        activityRule.launchActivity(null)
+        Espresso.onView(ViewMatchers.withId(R.id.action_search)).perform(ViewActions.click())
+        Espresso.onView(ViewMatchers.withId(R.id.search_src_text))
+            .perform(
+                ViewActions.replaceText("flowers"),
+                ViewActions.pressImeActionButton(),
+                ViewActions.closeSoftKeyboard()
+            )
+        Espresso.onView(ViewMatchers.withText(nasaApi.title)).isVisible()
     }
 }
