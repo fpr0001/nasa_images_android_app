@@ -25,7 +25,7 @@ class DetailActivity : BaseAppCompatActivity() {
 
     companion object {
 
-        private const val EXTRA_MODEL = "ExtraModel"
+        const val EXTRA_MODEL = "ExtraModel"
 
         fun startActivity(context: Context, model: ImageData) {
             val intent = Intent(context, DetailActivity::class.java)
