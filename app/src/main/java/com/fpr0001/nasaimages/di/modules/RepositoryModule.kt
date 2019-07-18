@@ -13,7 +13,12 @@ open class RepositoryModule {
 
     @Provides
     @Singleton
-    open fun providesRepository(nasaApi: NasaApi, mapper: ResponseMapper): ResponseRepository =
+    open fun providesRepository(impl: ResponseRepositoryImpl): ResponseRepository =
+        impl
+
+    @Provides
+    @Singleton
+    open fun providesRepositoryImpl(nasaApi: NasaApi, mapper: ResponseMapper): ResponseRepositoryImpl =
         ResponseRepositoryImpl(nasaApi, mapper)
 
     @Provides
