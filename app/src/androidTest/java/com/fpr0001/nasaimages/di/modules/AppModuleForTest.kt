@@ -1,12 +1,10 @@
-package com.fpr0001.nasaimages
+package com.fpr0001.nasaimages.di.modules
 
 import android.app.Application
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
-import com.fpr0001.nasaimages.apis.NasaApi
 import com.fpr0001.nasaimages.search.*
 import com.fpr0001.nasaimages.utils.*
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import org.mockito.Mockito.mock

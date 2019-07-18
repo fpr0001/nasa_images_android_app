@@ -72,4 +72,4 @@ open class SchedulerProviderImpl @Inject constructor() : BaseSchedulerImpl(
     providerIo = Provider { Schedulers.io() },
     providerMain = Provider { AndroidSchedulers.mainThread() })
 
-open class SchedulerProviderTestImpl : BaseSchedulerImpl(Provider { Schedulers.trampoline() })
+open class SchedulerProviderTestImpl @Inject constructor() : BaseSchedulerImpl(Provider { Schedulers.trampoline() })
