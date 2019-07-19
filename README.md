@@ -25,9 +25,9 @@ Visual identity inspired by the [Nasa Web Design System](https://nasa.github.io/
        <img width="400" alt="Screen Shot 2019-07-19 at 16 46 17" src="https://user-images.githubusercontent.com/6198387/61562664-2c5a6680-aa48-11e9-97c1-160e7c8b84c8.png">
 
 ---
----
  For the following options, make sure the animations are ON:
- In your Android device, under configuration -> Developer Options -> Set 'Window animation scale', 'Transition animation scale', and 'Animator duration scale' to 1x; 
+ 
+In your Android device, under configuration -> Developer Options -> Set 'Window animation scale', 'Transition animation scale', and 'Animator duration scale' to 1x; 
 
 * To run the app:
   * Connect an Android device with that is debug enabled and runs Android API level 28 or greater (or run an emulator with same configuration); 
@@ -36,6 +36,7 @@ Visual identity inspired by the [Nasa Web Design System](https://nasa.github.io/
 * Install the APK;
   * Optionally you can install the .apk file that is in the root directory of this repository. To do that, copy the file to your Android device running Android API level 28 or greater, tap to open it and follow the on-screen instructions. Make sure your device allows installation of .apk files from unknown sources.
 
+---
 ### App Architecture Overview
 
 App uses Model View Presenter Architecture
@@ -44,6 +45,7 @@ App uses Model View Presenter Architecture
 
 When a search is made, the query is sent to the Presenter, which calls the Repository, which calls the NasaApi, which returns to the Repository an 'order' that must be fulfilled. The Repository uses a Mapper to transform the stream of objects returned by the 'order', and returns to the Presenter a 'modified order'. The Presenter executes the order and notifies the view whenever the status of the order changes. The view, then, displays the status to the user accordingly, being that an error, a collection of images, or a loading indicator.
 
+---
 ### Libraries Used
 
 * [Mockito](https://site.mockito.org/)
