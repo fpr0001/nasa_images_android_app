@@ -16,24 +16,9 @@ abstract class DetailModule {
     @Module
     companion object {
 
-//        @JvmStatic
-//        @Provides
-//        internal fun providesPresenter(
-//            repository: ResponseRepository,
-//            adapter: SearchAdapter,
-//            schedulerProvider: SchedulerProvider
-//        ): SearchPresenter {
-//            return SearchPresenter(repository, schedulerProvider, adapter)
-//        }
-//
-//        @JvmStatic
-//        @Provides
-//        internal fun providesSearchAdapter(glide: RequestManager) = SearchAdapter(glide)
-
         @JvmStatic
         @Provides
         internal fun providesGlide(activity: DetailActivity) = Glide.with(activity)
-
 
     }
 }

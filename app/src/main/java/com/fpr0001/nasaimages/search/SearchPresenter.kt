@@ -3,8 +3,11 @@ package com.fpr0001.nasaimages.search
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import androidx.annotation.VisibleForTesting
 import androidx.appcompat.widget.SearchView
+import com.fpr0001.nasaimages.models.ImageData
 import com.fpr0001.nasaimages.utils.*
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 
 open class SearchPresenterImpl(
@@ -48,6 +51,14 @@ open class SearchPresenterImpl(
         }
     }
 
+    @VisibleForTesting
+    fun clearState() {
+        page = 1
+        isLoading = false
+        hasReachedDataLimit = false
+        query = null
+    }
+
     fun fetchMedias(fromScratch: Boolean) {
 
         if (isLoading) return
@@ -70,7 +81,7 @@ open class SearchPresenterImpl(
                     if (fromScratch) {
                         adapter.refreshList(responseList)
                     } else {
-                        Handler(Looper.getMainLooper()).post {adapter.nextPageFetched(responseList)}
+                        nextPageFetched(responseList)
                     }
                     if (adapter.list.isEmpty()) {
                         view?.showEmptyListView()
@@ -78,6 +89,10 @@ open class SearchPresenterImpl(
                 }
                 isLoading = false
             }.addTo(compositeDisposable)
+    }
+
+    open fun nextPageFetched(responseList: List<ImageData>) {
+        Handler(Looper.getMainLooper()).post { adapter.nextPageFetched(responseList) }
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {

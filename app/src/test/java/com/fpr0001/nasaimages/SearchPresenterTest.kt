@@ -3,10 +3,12 @@ package com.fpr0001.nasaimages
 import com.fpr0001.nasaimages.models.ImageData
 import com.fpr0001.nasaimages.search.SearchAdapter
 import com.fpr0001.nasaimages.search.SearchMvpView
-import com.fpr0001.nasaimages.search.SearchPresenterImpl
+import com.fpr0001.nasaimages.search.SearchPresenterImpl.Companion.MAX_COUNT_PER_PAGE
 import com.fpr0001.nasaimages.utils.ResponseRepository
 import com.fpr0001.nasaimages.utils.SchedulerProviderTestImpl
 import io.reactivex.Single
+import io.reactivex.plugins.RxJavaPlugins
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
@@ -16,7 +18,7 @@ import org.mockito.MockitoAnnotations
 
 class SearchPresenterTest {
 
-    lateinit var presenter: SearchPresenterImpl
+    lateinit var presenter: SearchPresenterImplForTests
 
     var schedulerProvider = SchedulerProviderTestImpl()
 
@@ -35,8 +37,14 @@ class SearchPresenterTest {
     @Before
     fun init() {
         MockitoAnnotations.initMocks(this)
-        presenter = SearchPresenterImpl(repository, schedulerProvider, adapter)
+        RxJavaPlugins.setErrorHandler {}
+        presenter = SearchPresenterImplForTests(repository, schedulerProvider, adapter)
         presenter.attachView(view)
+    }
+
+    @After
+    fun destroy() {
+        presenter.destroy()
     }
 
     @Test
@@ -74,7 +82,7 @@ class SearchPresenterTest {
     @Test
     fun shouldNotifyAdapterWhenMediasAreFetched() {
         val mockImageData = mock(ImageData::class.java)
-        val mockedList = Array(100) { mockImageData }.toList()
+        val mockedList = Array(MAX_COUNT_PER_PAGE) { mockImageData }.toList()
         Mockito.`when`(repository.fetchImages(anyInt(), anyString()))
             .thenReturn(Single.just(mockedList))
         presenter.onQueryTextSubmit(query)

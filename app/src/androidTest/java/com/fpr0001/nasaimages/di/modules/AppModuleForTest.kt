@@ -1,23 +1,19 @@
 package com.fpr0001.nasaimages.di.modules
 
-import android.app.Application
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.fpr0001.nasaimages.AppForTests
-import com.fpr0001.nasaimages.search.*
-import com.fpr0001.nasaimages.utils.*
+import com.fpr0001.nasaimages.search.SearchAdapter
+import com.fpr0001.nasaimages.search.SearchAdapterImpl
+import com.fpr0001.nasaimages.search.SearchPresenter
+import com.fpr0001.nasaimages.search.SearchPresenterImpl
+import com.fpr0001.nasaimages.utils.ResponseRepository
+import com.fpr0001.nasaimages.utils.SchedulerProvider
 import dagger.Module
 import dagger.Provides
-import org.mockito.Mockito.mock
 import org.mockito.Mockito.spy
 import javax.inject.Singleton
 
-
-/**
- * ALL FUNCTIONS MUST BE OPEN, SO MOCKITO CAN ACCESS THEM.
- * ALL DEPENDENCIES MUST BE DECLARED HERE, BECAUSE DAGGERMOCK ONLY
- * REPLACES INSTANCES FROM APPLICATION COMPONENT
- */
 @Module(
     includes = [ApiModuleForTests::class,
         RepositoryModuleForTests::class,

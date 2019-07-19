@@ -1,22 +1,18 @@
 package com.fpr0001.nasaimages.detail
 
-import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
-import android.content.res.Configuration
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
-import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.filters.MediumTest
 import androidx.test.rule.ActivityTestRule
-import com.fpr0001.nasaimages.*
-import com.fpr0001.nasaimages.apis.NasaApi
+import com.fpr0001.nasaimages.R
+import com.fpr0001.nasaimages.appForTests
 import com.fpr0001.nasaimages.detail.DetailActivity.Companion.EXTRA_MODEL
 import com.fpr0001.nasaimages.di.modules.NasaApiImplForTests
 import com.fpr0001.nasaimages.di.modules.ResponseMapperForTests
+import com.fpr0001.nasaimages.isVisible
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
