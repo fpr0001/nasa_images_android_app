@@ -18,14 +18,20 @@ Visual identity inspired by the [Nasa Web Design System](https://nasa.github.io/
   
 * To run instrumentation tests:
   * Connect an Android device with that is debug enabled and runs Android API level 28 or greater (or run an emulator with same configuration);
+  * In your device, under configuration -> Developer Options -> Turn off 'Window animation scale', 'Transition animation scale', and 'Animator duration scale';  
   * Double click on the nasa_images_android_app/:app/Tasks/Verification/connectedDebugAndroidTest gradle task;
   * Results can be found in the *Build Output* window. They are also available under app/build/reports/androidTests/<some_other_folder_here>  (look for a file named index.html and open it with your browser);
 
        <img width="400" alt="Screen Shot 2019-07-19 at 16 46 17" src="https://user-images.githubusercontent.com/6198387/61562664-2c5a6680-aa48-11e9-97c1-160e7c8b84c8.png">
 
+---
+---
+ For the following options, make sure the animations are ON:
+ In your Android device, under configuration -> Developer Options -> Set 'Window animation scale', 'Transition animation scale', and 'Animator duration scale' to 1x; 
+
 * To run the app:
-  * Connect an Android device with that is debug enabled and runs Android API level 28 or greater (or run an emulator with same configuration);
-  * Select configuration "app" and tap on the green play button;
+  * Connect an Android device with that is debug enabled and runs Android API level 28 or greater (or run an emulator with same configuration); 
+  * In the Android Studio, select configuration "app" and tap on the green play button;
   
 * Install the APK;
   * Optionally you can install the .apk file that is in the root directory of this repository. To do that, copy the file to your Android device running Android API level 28 or greater, tap to open it and follow the on-screen instructions. Make sure your device allows installation of .apk files from unknown sources.
