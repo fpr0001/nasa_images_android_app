@@ -24,7 +24,8 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito.verify
+import org.mockito.ArgumentMatchers
+import org.mockito.Mockito.*
 import javax.inject.Inject
 
 
@@ -37,7 +38,7 @@ class SearchActivityTest {
     lateinit var nasaApi: NasaApi
 
     @Inject
-    lateinit var adapter: SearchAdapter
+    lateinit var adapter: SearchAdapterImpl
 
     @Inject
     lateinit var presenter: SearchPresenterImpl
@@ -53,6 +54,7 @@ class SearchActivityTest {
     @After
     fun destroy() {
         presenter.clearState()
+        clearInvocations(adapter)
     }
 
     @Test
@@ -75,7 +77,7 @@ class SearchActivityTest {
         val position = activityRule.activity.recyclerView.adapter!!.itemCount - 16
         Espresso.onView(withId(R.id.recyclerView))
             .perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(position))
-        verify(adapter).loadMoreFunc
+        verify(adapter).nextPageFetched(ArgumentMatchers.anyList())
         assert(adapter.list.size > 130)
     }
 

@@ -42,11 +42,11 @@ open class AppModuleForTest {
 
     @Provides
     @Singleton
-    internal fun providesSearchAdapterImpl(glide: RequestManager): SearchAdapterImpl = SearchAdapterImpl(glide)
+    internal fun providesSearchAdapterImpl(glide: RequestManager): SearchAdapterImpl = spy(SearchAdapterImpl(glide))
 
 
     @Provides
     @Singleton
-    internal fun providesSearchAdapter(impl: SearchAdapterImpl): SearchAdapter = spy(impl)
+    internal fun providesSearchAdapter(impl: SearchAdapterImpl): SearchAdapter = impl
 
 }
