@@ -42,7 +42,7 @@
                 android:ellipsize="end"
                 android:gravity="bottom"
                 tools:text="banana banana "
-                android:textColor="@android:color/white"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1.Nasa"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="@+id/gradientView"
                 app:layout_constraintStart_toStartOf="parent"

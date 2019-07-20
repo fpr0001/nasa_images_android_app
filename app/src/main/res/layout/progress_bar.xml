@@ -2,7 +2,8 @@
 <ProgressBar xmlns:android="http://schemas.android.com/apk/res/android"
              android:id="@+id/progressBar"
              android:layout_width="match_parent"
-             android:background="@android:color/black"
+             android:backgroundTint="@null"
+             android:background="@null"
              android:indeterminateOnly="true"
              style="@style/Widget.AppCompat.ProgressBar.Horizontal"
              android:layout_height="wrap_content"/>

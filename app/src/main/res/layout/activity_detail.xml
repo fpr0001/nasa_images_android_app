@@ -5,7 +5,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:fitsSystemWindows="true"
-        android:background="@android:color/black"
+        android:background="@color/colorBackground"
         android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -39,7 +39,7 @@
 
             <View
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="110dp"
                     app:layout_collapseMode="parallax"
                     android:layout_gravity="bottom"
                     android:background="@drawable/shadow_gradient"
@@ -50,7 +50,6 @@
                     android:id="@+id/toolbar"
                     layout="@layout/toolbar"
                     app:layout_collapseMode="pin"
-                    tools:title="maca"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"/>
 
@@ -82,7 +81,7 @@
                     android:textSize="14sp"
                     android:gravity="bottom"
                     tools:text="banana banana "
-                    android:textColor="@android:color/white"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1.Nasa"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -99,13 +98,12 @@
                     android:textSize="18sp"
                     android:gravity="bottom"
                     tools:text="banana banana banana banana banana banana banana banana banana banana banana banana banana banana banana banana "
-                    android:textColor="@android:color/white"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1.Nasa"
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/textViewDate"
                     app:layout_constraintEnd_toEndOf="parent"
             />
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
