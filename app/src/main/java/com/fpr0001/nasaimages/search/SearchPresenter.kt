@@ -31,6 +31,8 @@ open class SearchPresenterImpl(
         private const val KEY_DATA_LIMIT = "keyDataLimit"
         private const val KEY_IS_LOADING = "keyIsLoading"
         const val MAX_COUNT_PER_PAGE = 100
+        const val LAST_PAGE = 100
+
     }
 
     override fun onSaveInstanceState(state: Bundle) {
@@ -76,8 +78,8 @@ open class SearchPresenterImpl(
                 if (exception != null) {
                     view?.showRandomErrorView()
                 } else {
+                    hasReachedDataLimit = responseList.size != MAX_COUNT_PER_PAGE || page == LAST_PAGE
                     page++
-                    hasReachedDataLimit = responseList.size != MAX_COUNT_PER_PAGE
                     if (fromScratch) {
                         adapter.refreshList(responseList)
                     } else {
