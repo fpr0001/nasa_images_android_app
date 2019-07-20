@@ -13,8 +13,7 @@
         <activity android:name=".splash.SplashActivity"
                   android:theme="@style/SplashTheme"
                   android:noHistory="true"
-                  android:screenOrientation="portrait"
-        >
+                  android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <action android:name="android.intent.action.VIEW"/>
@@ -23,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".search.SearchActivity"
-                  android:windowSoftInputMode="stateHidden"/>
+                  android:windowSoftInputMode="stateHidden|adjustNothing"/>
         <activity android:name=".detail.DetailActivity"/>
     </application>
 
