@@ -3,6 +3,14 @@ Simple app to showcase images from the [Nasa API](https://images.nasa.gov/docs/i
 
 Visual identity inspired by the [Nasa Web Design System](https://nasa.github.io/nasawds-site/components/colors/)
 
+----
+
+### User instructions
+
+* Use the search bar to query specific images from Nasa;
+* To see detailed information, tap on the image. From there, you can see the image in full-screen by turning your device to landscape. Pinch or double-tap to zoom;
+
+
 -----
 
 ### How to build & run
