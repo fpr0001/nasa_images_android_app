@@ -10,6 +10,7 @@ Visual identity inspired by the [Nasa Web Design System](https://nasa.github.io/
 * Use the search bar to query specific images from Nasa;
 * To see detailed information, tap on the image. From there, you can see the image in full-screen by turning your device to landscape. Pinch or double-tap to zoom;
 
+<img width="200" alt="device-2019-07-20-024442" src="https://user-images.githubusercontent.com/6198387/61574628-b03c3f00-aa98-11e9-919b-87d528635745.png"><img width="200" alt="device-2019-07-20-024548" src="https://user-images.githubusercontent.com/6198387/61574629-b03c3f00-aa98-11e9-85eb-9479f5f52278.png"><img width="200" alt="device-2019-07-20-024622" src="https://user-images.githubusercontent.com/6198387/61574630-b03c3f00-aa98-11e9-914a-85183feac9ba.png">
 
 -----
 
