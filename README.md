@@ -39,7 +39,7 @@ Visual identity inspired by the [Nasa Web Design System](https://nasa.github.io/
 In your Android device, under configuration -> Developer Options -> Set 'Window animation scale', 'Transition animation scale', and 'Animator duration scale' to 1x; 
 
 * To run the app:
-  * Connect an Android device with that is debug enabled and runs Android API level 28 or greater (or run an emulator with same configuration); 
+  * Connect an Android device that is debug enabled and runs Android API level 28 or greater (or run an emulator with same configuration); 
   * In the Android Studio, select configuration "app" and tap on the green play button;
   
 * Install the APK;
